@@ -15,14 +15,21 @@ def index(request):
 
 def post_list_view(request):
     post_list = Post.objects.all() # Post 전체 데이터 조회
-    # post_list = Post.objects.filter(writer=request.user)
+    # post_list = Post.objects.filter(writer=request.user) # Post.writer가 현재 로그인인 것 조회
     context = {
         'post_list': post_list,
     }
     return render(request, 'posts/post_list.html', context)
 
 def post_detail_view(request, id):
-    return render(request, 'posts/post_detail.html')
+    try:
+        post = Post.objects.get(id=id)
+    except Post.DoesNotExist:
+        return redirect('index')
+    context = {
+        'post': post,
+    }
+    return render(request, 'posts/post_detail.html', context)
 
 @login_required
 def post_create_view(request):

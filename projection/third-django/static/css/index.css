@@ -2,11 +2,14 @@
     display: flex;
     flex-direction: column;
     max-width: 425px;
+    margin: 0 auto;
 }
 
 body {
     font-family: 'Noto Sans KR', sans-serif;
     margin: 0 auto 60px auto;
+    display: flex;
+    justify-content: center;
 }
 
 main {
@@ -96,7 +99,7 @@ main {
 }
 
 .card__like-num {
-    font-weight: bold;
+    font-weight: lighter;
 }
 
 .card__main-text {
