@@ -1,10 +1,11 @@
 {% load static %}
 <div class="card">
     <div class="card__header">
-        <img src="http://via.placeholder.com/32x32" alt="프로필이미지">
+        <img src="http://via.placeholder.com/32x32" alt="프로필이미지">&nbsp;
         <a href="#">
-        <span class="card__user-name">{{ post.writer }}</span>
+            <span class="card__user-name">{{ post.writer }}</span>
         </a>
+    
     </div>
     <div class="card__body">
         <div>
@@ -14,7 +15,7 @@
                 <img class="card__image" src="http://via.placeholder.com/600x600" alt="">
             {% endif %}
         </div>
-        <div class="card__btn-group">
+            <div class="card__btn-group">
             <div>
                 <img class="crad_btn" src="{% static 'icons/favorite_outlined_black_36dp.svg' %}" alt="좋아요">
                 <img class="crad_btn" src="{% static 'icons/mode_comment_outlined_black_36dp.svg' %}" alt="댓글">
@@ -24,6 +25,7 @@
                 <img class="crad_btn" src="{% static 'icons/bookmark_outlined_black_36dp.svg' %}" alt="북마크">
             </div>
         </div>
+        
         <div class="card__like-num">
             <span class="card__like-num">좋아요 00개</span>
             <div class="card__main-text">
@@ -61,7 +63,15 @@
                 </ul>
                 <p class="card__created-at">{{ post.created_at|date:"Y년 m월 d일" }}</p>
             </div>
+            <br>
+            <div style="text-align: right">
+                {% if request.user == post.writer %}
+                    <a href="{% url 'posts:post-update' post.id %}">수정하기</a> |
+                    <a href="{% url 'posts:post-delete' post.id %}">삭제하기</a>
+                {% endif %}
+            </div>
         </div>
-
     </div>
 </div>
+<br>
+<br>

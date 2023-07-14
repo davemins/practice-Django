@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.views.generic.list import ListView
 from django.contrib.auth.decorators import login_required
@@ -48,10 +48,35 @@ def post_create_view(request):
         return redirect('index')
     
 def post_update_view(request, id):
-    return render(request, 'posts/post_form.html')
 
+    # post = Post.objects.get(id=id)
+    post = get_object_or_404(Post, id=id)
+    if request.method == 'GET':
+        context = { 'post': post }
+        return render(request, 'posts/post_form.html', context)
+    elif request.method == 'POST':
+        new_image = request.FILES.get('image')
+        content = request.POST.get('content')
+        print(new_image)
+        print(content)
+        if new_image:
+            post.image.delete()
+            post.image = new_image
+
+        post.content = content
+        post.save()
+        return redirect('posts:post-detail', post.id)
+
+@login_required
 def post_delete_view(request, id):
-    return render(request, 'posts/post_confirm_delete.html')
+    post = get_object_or_404(Post, id=id, writer=request.user)
+    if request.method == 'GET':
+        context = { 'post': post }
+        return render(request, 'posts/post_confirm_delete.html', context)
+    else:
+        post.delete()
+        return redirect('index')
+    
 
 def url_view(request):
     print('url_view()')
