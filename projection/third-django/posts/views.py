@@ -12,6 +12,7 @@ def index(request):
     }
     return render(request, 'index.html', context)
 
+# Read
 
 def post_list_view(request):
     post_list = Post.objects.all() # Post 전체 데이터 조회
@@ -31,6 +32,8 @@ def post_detail_view(request, id):
     }
     return render(request, 'posts/post_detail.html', context)
 
+# Create
+
 @login_required
 def post_create_view(request):
     if request.method == 'GET':
@@ -46,11 +49,13 @@ def post_create_view(request):
             writer=request.user
         )
         return redirect('index')
-    
-def post_update_view(request, id):
 
+# Upgrade
+
+@login_required
+def post_update_view(request, id):
     # post = Post.objects.get(id=id)
-    post = get_object_or_404(Post, id=id)
+    post = get_object_or_404(Post, id=id, writer=request.user)
     if request.method == 'GET':
         context = { 'post': post }
         return render(request, 'posts/post_form.html', context)
@@ -66,6 +71,8 @@ def post_update_view(request, id):
         post.content = content
         post.save()
         return redirect('posts:post-detail', post.id)
+
+# Delete
 
 @login_required
 def post_delete_view(request, id):
